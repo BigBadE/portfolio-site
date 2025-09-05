@@ -1,0 +1,83 @@
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Algebraic Effects and the Function Coloring Problem</title>
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="description" content="Understanding how algebraic effects solve the function coloring problem">
+    <meta property="og:title" content="Algebraic Effects Explained">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <meta property="og:image:alt" content="">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <meta name="theme-color" content="#fafafa">
+</head>
+<body>
+<script src="js/app.js"></script>
+
+<h1>Algebraic Effects and the Function Coloring Problem</h1>
+
+<h2>The Problem: Why Functions Get "Painted"</h2>
+<p>If you've ever written JavaScript or Python, you've probably seen the dreaded async/await keywords. Once you make one function async, suddenly every function that calls it needs to be async too. It's like dropping red paint in water - the color spreads everywhere it touches. This is what programmers call the "function coloring problem."</p>
+
+<p>Here's the thing: when you mark a function as async, you're basically saying "this function might need to wait for something" - like fetching data from the internet or reading a file. But now you've created two types of functions in your code: regular ones (blue) and async ones (red). And they don't play nice together. A regular function can't call an async function without becoming async itself. Before you know it, your entire codebase is red!</p>
+
+<h2>Why This Actually Sucks</h2>
+<p>This isn't just annoying - it's a real problem. Imagine you wrote a nice, simple function that adds two numbers. Works great! Then someone says "hey, we need to log this addition to a database." Suddenly your simple add() function needs to be async, and so does everything that uses it. You're refactoring half your codebase because of one tiny change.</p>
+
+<p>Even worse, you can't easily switch between sync and async versions of things. Want to test your code with a fake database that runs instantly? Too bad - your functions are already painted async, even though they don't need to be anymore. Want to reuse your business logic in a different context? Hope you like the async flavor, because that's what you're stuck with.</p>
+
+<h2>Enter Algebraic Effects</h2>
+<p>Algebraic effects are like a magic eraser for function colors. The basic idea is pretty simple: instead of marking functions as async or not, you just write normal functions. When a function needs to do something special (like wait for data), it doesn't change color - it just asks the surrounding environment to handle it.</p>
+
+<p>Think of it like this: instead of painting your function red and saying "I'm async!", your function just raises its hand and says "Hey, I need to fetch some data here." The code that's running your function (we call it the handler) sees the raised hand and decides what to do. Maybe it actually fetches the data. Maybe it returns fake test data. Maybe it logs what would have been fetched. Your function doesn't know or care - it just gets the data and keeps going.</p>
+
+<h2>How It Actually Works</h2>
+<p>Let's say you're writing a function that needs to read a user from a database. With algebraic effects, you'd write something like:</p>
+
+<p>function getUsername(userId) {<br>
+    &nbsp;&nbsp;let user = perform GetUser(userId);<br>
+    &nbsp;&nbsp;return user.name;<br>
+    }</p>
+
+<p>See that "perform" keyword? That's your function raising its hand. It's saying "I need someone to get me a user with this ID." The function itself isn't async - it's just a normal function that happens to need something from the outside world.</p>
+
+<p>Now, when you run this function, you wrap it with a handler that knows what to do when it sees GetUser:</p>
+
+<p>handle(getUsername(123), {<br>
+    &nbsp;&nbsp;GetUser(id) {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;// Actually fetch from database<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;return database.fetch(id);<br>
+    &nbsp;&nbsp;}<br>
+    });</p>
+
+<p>The beautiful part? Your getUsername function works exactly the same way whether the handler fetches real data, returns test data, or does something completely different. No colors, no async/await spreading through your code like wildfire.</p>
+
+<h2>Why This Is Actually Amazing</h2>
+<p>First off, your functions stay simple. They don't know or care whether they're being run in a test, in production, or in some weird debugging mode. They just do their thing and let the handler worry about the details.</p>
+
+<p>Second, you can swap out behaviors without touching your code. Want to test? Use a handler that returns fake data instantly. Want to debug? Use a handler that logs everything. Want to add caching? Just wrap another handler around it. Your actual business logic never changes.</p>
+
+<p>Third, and this is the big one: no more function coloring! A function that uses effects looks exactly like a normal function to everyone else. You can call it from anywhere, use it in any context, and it just works. The async problem simply disappears.</p>
+
+<h2>The Catch (Because There's Always a Catch)</h2>
+<p>Algebraic effects aren't widely available yet. A few languages like OCaml and Koka have them, but JavaScript, Python, Java, and most popular languages don't. Why? Partly because they're relatively new, partly because they're hard to implement efficiently, and partly because async/await is "good enough" for most people.</p>
+
+<p>But the idea is spreading. React actually uses a form of algebraic effects internally for things like Suspense and hooks. And more language designers are looking at them as a solution to not just async, but all sorts of problems like error handling, state management, and more.</p>
+
+<h2>The Bottom Line</h2>
+<p>Algebraic effects let you write functions that can do special things (like async operations) without having to paint them a special color. Your code stays simple, testable, and flexible. While you probably can't use them in your day job yet, understanding the concept helps you see why current solutions like async/await are frustrating and what a better world might look like.</p>
+
+<p>It's like the difference between having to label every box in your house as "contains something that might need batteries" versus just being able to ask for batteries when you actually need them. One approach infects everything it touches; the other just handles things as they come up. That's the promise of algebraic effects - programming without the paint.</p>
+
+<h2>Original Prompt</h2>
+<pre>&lt;!doctype html&gt; &lt;html class="no-js" lang=""&gt; &lt;head&gt; &lt;meta charset="utf-8"&gt; &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt; &lt;title&gt;Ethan's Portfolio&lt;/title&gt; &lt;link rel="stylesheet" href="css/style.css"&gt; &lt;meta name="description" content=""&gt; &lt;meta property="og:title" content=""&gt; &lt;meta property="og:type" content=""&gt; &lt;meta property="og:url" content=""&gt; &lt;meta property="og:image" content=""&gt; &lt;meta property="og:image:alt" content=""&gt; &lt;link rel="icon" href="/favicon.ico" sizes="any"&gt; &lt;meta name="theme-color" content="#fafafa"&gt; &lt;/head&gt; &lt;body&gt; &lt;script src="js/app.js"&gt;&lt;/script&gt; &lt;h1&gt;Technical Portfolio&lt;/h1&gt; &lt;h2&gt;&lt;a href="https://github.com/asymptotic-code/sui-prover"&gt;Sui-Prover&lt;/a&gt;&lt;/h2&gt; &lt;p&gt;For my work with Asymptotic, I've been working on a Lean backend for their formal verification tool. The tool itself is pretty simple: When writing financial code, you want to ensure that bugs won't ever let people steal money. For example, if I was writing a withdraw function, I'd want to make sure that under no circumstances does the user end up with more money than they started with. Formal verification is just that, you tell the tool "Make sure that if you run the code new_balance = withdraw(balance, x), new_balance &lt;= balance My specific job is writing a Lean backend. Lean is a functional (like Haskall) formal verification language. I'm working on a tool to convert the bytecode from the Sui code (called Move) to Lean source code, which is certainly a difficult task.&lt;/p&gt; &lt;h2&gt;&lt;a href="https://github.com/BigBadE/Raven-Language"&gt;Raven Language&lt;/a&gt;&lt;/h2&gt; &lt;p&gt;Raven is a programming language I've been working on for a few years. The main idea is to combine a low-level language like Rust with scripting-like syntax and memory management and change/add a few features that I've always wanted. This would ideally be done with a combination of the &lt;a href="https://smallcultfollowing.com/babysteps/blog/2024/06/02/the-borrow-checker-within/"&gt;"borrow checker within"&lt;/a&gt; thought up by Niko Matsakis and &lt;a href="https://overreacted.io/algebraic-effects-for-the-rest-of-us/"&gt;algebraic effects&lt;/a&gt;, along with a "modular" compiler. The idea is users can have power user advanced features like manual memory management, or can opt for a more scripting-like approach. This is obviously more theoretical than practical at the moment, but I've learned a lot implementing it!&lt;/p&gt; &lt;h2&gt;&lt;a href = https://github.com/BigBadE/Exokernel&gt;Exokernel&lt;/a&gt;&lt;/h2&gt; &lt;p&gt;A BIOS exokernel I wrote by hand in Rust using the OSDev wiki. Currently it's stuck in 32-bit protected mode due to a memory bug, but it's been a massive learning experience with a lot of lower level techniques and implementation details of computers.&lt;/p&gt; &lt;a href="index.html"&gt;Go back!&lt;/a&gt; &lt;/body&gt; &lt;/html&gt;</pre>
+
+<p>Using the format of this page, I want you to generate a HTML page for my website. The page should include of the entirety of this prompt. I want you to go into depth about how algebraic effects can solve the function painting problem, focusing on an audience of mostly beginner programmers who know how to code but likely not much about async programming or the mathematical side.
+    I want you to focus on matching how barebones the page (no inline CSS or JS), and keep with the same writing style. Keep it friendly and low on technical terminology. Think hard about this, and make sure your output doesn't have any stray characters or other obvious issues. Don't include the original page in your output except in the prompt area, the example given was for style and tone only, you shouldn't be relying on its content at all.</p>
+
+<a href="index.html">Go back!</a>
+</body>
+</html>

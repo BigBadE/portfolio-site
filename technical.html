@@ -1,0 +1,50 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ethan's Portfolio</title>
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="description" content="">
+
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <meta property="og:image:alt" content="">
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <meta name="theme-color" content="#fafafa">
+</head>
+
+<body>
+<script src="js/app.js"></script>
+<h1>Technical Portfolio</h1>
+<h2><a href="https://github.com/asymptotic-code/sui-prover">Sui-Prover</a></h2>
+<p>For my work with Asymptotic, I've been working on a Lean backend for their formal verification tool.
+The tool itself is pretty simple: When writing financial code, you want to ensure that bugs won't ever let people steal money.
+For example, if I was writing a withdrawal function, I'd want to make sure that under no circumstances does the user end up with more money than they started with.
+Formal verification is just that, you tell the tool "Make sure that if you run the code new_balance = withdraw(balance, x), new_balance <= balance"
+
+My specific job is writing a <a href="https://lean-lang.org/">Lean</a> backend. Lean is a functional (like Haskall) formal verification language. I'm working on a tool
+to convert the bytecode from the Sui code (called Move) to Lean source code, which is certainly a difficult task.</p>
+
+<h2><a href="https://github.com/BigBadE/Raven-Language">Raven Language</a></h2>
+<p>Raven is a programming language I've been working on for a few years. The main idea is to combine a low-level language like Rust
+with scripting-like syntax and memory management and change/add a few features that I've always wanted.
+
+This would ideally be done with a combination of the
+    <a href="https://smallcultfollowing.com/babysteps/blog/2024/06/02/the-borrow-checker-within/">"borrow checker within"</a>
+    thought up by Niko Matsakis and <a href="https://overreacted.io/algebraic-effects-for-the-rest-of-us/">algebraic effects</a>,
+along with a "modular" compiler. The idea is users can have power user advanced features like manual memory management, or can
+opt for a more scripting-like approach. This is more theoretical than practical at the moment, but I've learned a lot implementing it!</p>
+
+<h2><a href = "https://github.com/BigBadE/Exokernel">Exokernel</a></h2>
+<p>A BIOS exokernel I wrote by hand in Rust using the <a href="https://wiki.osdev.org/Expanded_Main_Page">OSDev wiki</a>.
+    Currently it's stuck in 32-bit protected mode due to a memory bug,
+but it's been a massive learning experience with a lot of lower level techniques and implementation details of computers.</p>
+<a href="index.html">Go back!</a>
+</body>
+
+</html>
