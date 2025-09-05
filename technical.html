@@ -38,12 +38,19 @@ This would ideally be done with a combination of the
     <a href="https://smallcultfollowing.com/babysteps/blog/2024/06/02/the-borrow-checker-within/">"borrow checker within"</a>
     thought up by Niko Matsakis and <a href="https://overreacted.io/algebraic-effects-for-the-rest-of-us/">algebraic effects</a>,
 along with a "modular" compiler. The idea is users can have power user advanced features like manual memory management, or can
-opt for a more scripting-like approach. This is more theoretical than practical at the moment, but I've learned a lot implementing it!</p>
+opt for a more scripting-like approach. This is more theoretical than practical at the moment, but I've learned a lot implementing it!
+
+Currently, the language has a full Rust-like type system supporting traits, polynomials in functions, structs, and impls,
+operators, custom operators, and a toolchain manager called Magpie.</p>
 
 <h2><a href = "https://github.com/BigBadE/Exokernel">Exokernel</a></h2>
 <p>A BIOS exokernel I wrote by hand in Rust using the <a href="https://wiki.osdev.org/Expanded_Main_Page">OSDev wiki</a>.
     Currently it's stuck in 32-bit protected mode due to a memory bug,
-but it's been a massive learning experience with a lot of lower level techniques and implementation details of computers.</p>
+but it's been a massive learning experience with a lot of lower level techniques and implementation details of computers.
+
+Some of the big features in this are a ~100 byte first stage, disk reading using a Disk Access Packet, VESA graphics,
+and a Global Descriptor Table. I also worked on a later stage using an already written bootloader which handled things
+like CPU exceptions and paging before I decided to try writing this one from scratch.</p>
 <a href="index.html">Go back!</a>
 </body>
 
